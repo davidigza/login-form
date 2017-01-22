@@ -1,0 +1,199 @@
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<dom-module id="login-form">
+    <template>
+    <style>
+      :host {
+        position: absolute;
+        height: 100vh;
+        left:0;
+        right: 0;
+        display: block;
+        background: #000;
+        overflow: hidden;
+        transform: translateX(100%);
+        transition: transform 225ms ease-in;
+        z-index: 3;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+      header {
+          padding-bottom: 32px;
+      }
+      header h1{
+        font-family: VarelaRound-Regular;
+        font-size: 12px;
+        color: #0086FF;
+        letter-spacing: 1px;
+        line-height: 15px;
+        text-transform: uppercase;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      main div {
+          display: flex;
+      }
+
+      label {
+        font-family: VarelaRound-Regular;
+        font-size: 11px;
+        color: #868588;
+        letter-spacing: 1px;
+        line-height: 11px; 
+        text-transform: uppercase;
+      }
+     
+
+    paper-input.login {
+        --paper-input-container:{
+            font-family: VarelaRound-Regular;
+            font-size: 16px;
+            color: rgba(255,255,255,0.48);
+            letter-spacing: 1px;
+            line-height: 16px;
+            margin-bottom: 25px;
+            margin-left: 2px;
+            }
+         --paper-input-container-underline:{
+            display: none;
+        }
+        --paper-input-container-underline-focus: {
+            color: #FFF;
+        }
+        --paper-input-container-focus-color: #FFF;
+        --paper-input-container-invalid-color: #FF007F;
+        --paper-input-container-input-color: #FFF;
+        
+    }
+
+    paper-button[disabled] {
+        flex: 1;
+        height: 48px;
+        opacity: 0.95;
+        background: #25202B;
+        border-radius: 100px;
+        font-family: VarelaRound-Regular;
+        font-size: 16px;
+        color: #868588;
+        letter-spacing: 1px;
+        text-transform: capitalize;
+    }
+
+    paper-button {
+        flex: 1;
+        height: 48px;
+        opacity: 0.95;
+        background: rgba(0,133,255,0.96);
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50), 4px 4px 8px 0 rgba(0,0,0,0.72);
+        border-radius: 100px;
+        font-family: VarelaRound-Regular;
+        font-size: 16px;
+        color: #12092F;
+        letter-spacing: 1px;
+        text-transform: capitalize;
+    }
+
+      .link {
+        margin-top:32px;
+        font-family: VarelaRound-Regular;
+        font-size: 14px;
+        color: #868588;
+        letter-spacing: 1px;
+      }
+
+      footer{
+          display: flex;
+          flex-direction: column;
+      }
+      footer span {      
+        font-family: VarelaRound-Regular;
+        font-size: 11px;
+        color: rgba(255,255,255,0.48);
+        letter-spacing: 1px;
+        line-height: 11px;
+        padding-bottom: 22px;
+      }
+
+      footer div.anotherAccounts{
+          display: flex;
+          width: 100%;
+      }
+
+      footer div.anotherAccounts paper-button {
+        border: 2px solid #868588;
+        color: #868588;
+        background: rgba(0,0,0,0.50);
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50), 4px 4px 8px 0 rgba(0,0,0,0.72);
+      }
+
+      footer div.anotherAccounts paper-button:hover {
+       color: rgba(0,133,255,0.96);
+      }
+
+    </style>
+    <header>
+        <h1>iniciar sesion</h1>
+    </header>
+     <main>
+        <label for="user">Identificacion</label>
+        <paper-input class="login" placeholder="Identificacion" noLabelFloat name="user" always-float-label value="{{user}}"></paper-input>
+        <label for="user">Contraseña</label>
+        <paper-input  class="login" placeholder="Escribe Contraseña"  noLabelFloat type="password" always-float-label value="{{password}}"></paper-input>
+        <div>
+            <paper-button class="doLogin" on-tap="showForm" disabled>Entrar</paper-button>
+        </div>
+        
+
+        <span class="link">¿Has olvidado la contraseña?</span>
+     </main>
+     <footer>
+         <span>ACCESO CON OTRAS CUENTAS</span>
+         <div class="anotherAccounts">
+            <paper-button on-tap="loginFacebook">Facebook</paper-button>
+            <paper-button on-tap="loginGoogle">Google</paper-button>
+         </div> 
+     </footer>
+  </template>
+
+    <script>
+        Polymer({
+
+            is: 'login-form',
+
+            properties: {
+                user: {
+                    type: String,
+                    observer: 'checkCredentials'
+                },
+                password: {
+                    type: String,
+                    observer: 'checkCredentials'
+                }
+            },
+
+            get login() {
+                return this.root.querySelector('.doLogin') || this.querySelector('.doLogin');
+            },
+
+            checkCredentials: function() {
+                var obj = this.login;;
+                if (this.user !== undefined && this.password !== undefined && this.user !== '' && this.password !== '') {
+                    if (obj.hasAttribute('disabled')) {
+                        obj.removeAttribute('disabled');
+                    }
+                } else {
+                    obj.setAttribute('disabled', true);
+                }
+            }
+
+        });
+    </script>
+</dom-module>
