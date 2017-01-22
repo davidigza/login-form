@@ -138,13 +138,20 @@
        color: rgba(0,133,255,0.96);
       }
 
+      .close {
+        position: absolute;
+        top: 18px;
+        right: 14px;
+        color: #868588;
+      }
+
     </style>
     <header>
         <h1>iniciar sesion</h1>
     </header>
      <main>
         <label for="user">Identificacion</label>
-        <paper-input class="login" placeholder="Identificacion" noLabelFloat name="user" always-float-label value="{{user}}"></paper-input>
+        <paper-input class="login" placeholder="Identificacion" type="email" noLabelFloat name="user" always-float-label value="{{user}}"></paper-input>
         <label for="user">Contraseña</label>
         <paper-input  class="login" placeholder="Escribe Contraseña"  noLabelFloat type="password" always-float-label value="{{password}}"></paper-input>
         <div>
@@ -161,6 +168,8 @@
             <paper-button on-tap="loginGoogle">Google</paper-button>
          </div> 
      </footer>
+
+     <paper-icon-button class="close" icon="my-icons:close" on-tap="closeForm" ></paper-icon-button>
   </template>
 
     <script>
@@ -192,7 +201,11 @@
                 } else {
                     obj.setAttribute('disabled', true);
                 }
-            }
+            },
+
+            closeForm: function() {
+                this.style.transform = 'translateX(100%)';
+            },
 
         });
     </script>
