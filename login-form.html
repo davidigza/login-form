@@ -155,7 +155,7 @@
         <label for="user">Contraseña</label>
         <paper-input  class="login" placeholder="Escribe Contraseña"  noLabelFloat type="password" always-float-label value="{{password}}"></paper-input>
         <div>
-            <paper-button class="doLogin" on-tap="showForm" disabled>Entrar</paper-button>
+            <paper-button class="doLogin" on-tap="makeLogin" disabled>Entrar</paper-button>
         </div>
         
 
@@ -171,9 +171,7 @@
 
      <paper-icon-button class="close" icon="my-icons:close" on-tap="closeForm" ></paper-icon-button>
 
-     <firebase-auth id="auth" app-name="PiezApp" signed-in="{{signedIn}}"
-     user="{{user}}">>
-     </firebase-auth>
+     
   </template>
 
     <script>
@@ -189,14 +187,6 @@
                 password: {
                     type: String,
                     observer: 'checkCredentials'
-                },
-                user: {
-                  type: Object,
-                  notify: true
-                },
-                signedIn:{
-                  type: Boolean,
-                  notify: true
                 }
             },
 
@@ -216,19 +206,25 @@
             },
 
             closeForm: function() {
-                this.classList.remove('login');
+              this.classList.remove('login');
+            },
+
+            makeLogin: function(){
+              var user = {
+                'mail': this.userMail,
+                'pass': this.password
+              };
+              this.fire('emailLogin', user);
             },
 
             loginGoogle: function() {
               this.closeForm();
-              this.$.auth.set('provider','google');
-              this.$.auth.signInWithPopup();
+              this.fire('doLogin','google')
             },
 
             loginFacebook: function(){
               this.closeForm();
-              this.$.auth.set('provider','facebook');
-              this.$.auth.signInWithPopup();
+              this.fire('doLogin','facebook')
             }
 
         });
