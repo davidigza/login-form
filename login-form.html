@@ -4,12 +4,11 @@
 <dom-module id="login-form">
     <template>
     <style>
-      :host {
+      :host{
         position: absolute;
         height: 100vh;
         left:0;
         right: 0;
-        display: block;
         background: #000;
         overflow: hidden;
         transform: translateX(100%);
@@ -20,6 +19,7 @@
         flex-direction: column;
         box-sizing: border-box;
       }
+
       header {
           padding-bottom: 32px;
       }
@@ -151,7 +151,7 @@
     </header>
      <main>
         <label for="user">Identificacion</label>
-        <paper-input class="login" placeholder="Identificacion" type="email" noLabelFloat name="user" always-float-label value="{{user}}"></paper-input>
+        <paper-input class="login" placeholder="Identificacion" type="email" noLabelFloat name="user" always-float-label value="{{userMail}}"></paper-input>
         <label for="user">Contraseña</label>
         <paper-input  class="login" placeholder="Escribe Contraseña"  noLabelFloat type="password" always-float-label value="{{password}}"></paper-input>
         <div>
@@ -170,6 +170,10 @@
      </footer>
 
      <paper-icon-button class="close" icon="my-icons:close" on-tap="closeForm" ></paper-icon-button>
+
+     <firebase-auth id="auth" app-name="PiezApp" signed-in="{{signedIn}}"
+     user="{{user}}">>
+     </firebase-auth>
   </template>
 
     <script>
@@ -178,13 +182,21 @@
             is: 'login-form',
 
             properties: {
-                user: {
+                userMail: {
                     type: String,
                     observer: 'checkCredentials'
                 },
                 password: {
                     type: String,
                     observer: 'checkCredentials'
+                },
+                user: {
+                  type: Object,
+                  notify: true
+                },
+                signedIn:{
+                  type: Boolean,
+                  notify: true
                 }
             },
 
@@ -194,7 +206,7 @@
 
             checkCredentials: function() {
                 var obj = this.login;;
-                if (this.user !== undefined && this.password !== undefined && this.user !== '' && this.password !== '') {
+                if (this.userMail !== undefined && this.password !== undefined && this.userMail !== '' && this.password !== '') {
                     if (obj.hasAttribute('disabled')) {
                         obj.removeAttribute('disabled');
                     }
@@ -204,8 +216,20 @@
             },
 
             closeForm: function() {
-                this.style.transform = 'translateX(100%)';
+                this.classList.remove('login');
             },
+
+            loginGoogle: function() {
+              this.closeForm();
+              this.$.auth.set('provider','google');
+              this.$.auth.signInWithPopup();
+            },
+
+            loginFacebook: function(){
+              this.closeForm();
+              this.$.auth.set('provider','facebook');
+              this.$.auth.signInWithPopup();
+            }
 
         });
     </script>
